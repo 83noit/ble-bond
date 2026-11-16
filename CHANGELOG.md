@@ -1,31 +1,36 @@
 # Changelog
 
-All notable changes to this project are documented here. The format follows
-[Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
-[Semantic Versioning](https://semver.org/): every 1.x release is backward compatible.
+Notable changes, newest first. The format follows
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
+[Semantic Versioning](https://semver.org/): every 1.x release stays backward compatible.
 
 ## [Unreleased]
+
+### Changed
+
+- The README is rewritten in plainer English, along with this changelog and the security
+  policy.
 
 ## [1.1.0] - 2026-11-16
 
 ### Changed
 
-- Every frame sent and received is logged on its own logger, `ble_bond.frames`, which starts at
-  INFO. Debug logging for `ble_bond` (Home Assistant's "Enable debug logging") now shows the
-  link's events without a dozen frame lines per exchange; set `ble_bond.frames` to debug to see
-  them. A level configured for it before import is kept.
+- Every frame sent and received now goes to its own logger, `ble_bond.frames`, which starts at
+  INFO. So debug logging for `ble_bond` (Home Assistant's "Enable debug logging") shows what the
+  link is doing without a dozen frame lines per exchange. Set `ble_bond.frames` to debug to see
+  the frames. If you set a level for it before the import, it's kept.
 
 ## [1.0.0] - 2026-11-16
 
 ### Added
 
-- `BondedLink`: a bonded BLE link that pairs on every connection, records the adapter or proxy
-  each attempt used, runs one request at a time with a caller-supplied reply check, and closes
-  the link on any request that does not finish. Taken from grundfos-ble 0.2.0 and mira-ble,
-  where it ran on real devices.
+- `BondedLink`: a bonded Bluetooth LE link. It pairs on every connection, notes the adapter
+  or proxy each attempt used, runs one request at a time with a reply check you supply, and
+  closes the link whenever a request doesn't finish. Taken from grundfos-ble 0.2.0 and
+  mira-ble, where it already ran on real devices.
 - `LinkPolicy` and `SubscribeRetry` for what differs between devices.
-- `PairingRequired` (with `refused`), `PairingUnsupported`, `ConnectionLost`,
-  `RequestTimeout`, all `LinkError`s.
+- `PairingRequired` (with `refused`), `PairingUnsupported`, `ConnectionLost` and
+  `RequestTimeout`, all of them `LinkError`s.
 - The BlueZ pairing agent (`bluez_pairing_agent`), `remove_bluez_bond` and `bluez_device_path`.
 - `ble_bond.testing`: `FakeClient` and `patched_establish`.
 
