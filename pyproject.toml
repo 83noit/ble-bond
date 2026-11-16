@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ble-bond"
-version = "1.0.0"
+version = "1.1.0"
 description = "Bonded Bluetooth LE sessions for devices that pair in a button window and answer one request at a time"
 readme = "README.md"
 license = "MIT"

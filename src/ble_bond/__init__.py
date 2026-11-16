@@ -19,7 +19,7 @@ from ble_bond.exceptions import (
 )
 from ble_bond.link import Accept, Assembler, BondedLink, LinkPolicy, SubscribeRetry
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 __all__ = [
     "Accept",
