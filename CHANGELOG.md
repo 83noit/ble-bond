@@ -6,7 +6,16 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
-## [1.0.0]
+## [1.1.0] - 2026-11-16
+
+### Changed
+
+- Every frame sent and received is logged on its own logger, `ble_bond.frames`, which starts at
+  INFO. Debug logging for `ble_bond` (Home Assistant's "Enable debug logging") now shows the
+  link's events without a dozen frame lines per exchange; set `ble_bond.frames` to debug to see
+  them. A level configured for it before import is kept.
+
+## [1.0.0] - 2026-11-16
 
 ### Added
 
@@ -20,5 +29,6 @@ All notable changes to this project are documented here. The format follows
 - The BlueZ pairing agent (`bluez_pairing_agent`), `remove_bluez_bond` and `bluez_device_path`.
 - `ble_bond.testing`: `FakeClient` and `patched_establish`.
 
-[Unreleased]: https://github.com/83noit/ble-bond/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/83noit/ble-bond/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/83noit/ble-bond/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/83noit/ble-bond/releases/tag/v1.0.0

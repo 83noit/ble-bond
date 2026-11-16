@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import logging
 from collections.abc import AsyncIterator, Callable
 from typing import Any
 from unittest.mock import patch
@@ -689,3 +690,29 @@ def test_plain_bleak_clients_are_left_alone() -> None:
 def test_the_default_policy_keeps_replies_above_the_supervision_timeout() -> None:
     """A stalled link that recovers within 8 s must still answer (ha-grundfos-ble#3)."""
     assert LinkPolicy().request_timeout > 8.0
+
+
+# --- Logging ------------------------------------------------------------------------------------
+
+
+async def test_frames_stay_out_of_the_links_debug_log(
+    client: FakeClient, caplog: pytest.LogCaptureFixture
+) -> None:
+    """Debug logging for ble_bond shows the link; the frames need ble_bond.frames."""
+    caplog.set_level(logging.DEBUG, logger="ble_bond")
+    link = _link(policy=QUICK)
+    await link.connect()
+    await link.request(REQUEST)
+    messages = [r.getMessage() for r in caplog.records]
+    assert any("connected and subscribed" in m for m in messages)
+    assert not any(": tx " in m or ": rx " in m for m in messages)
+
+    caplog.clear()
+    caplog.set_level(logging.DEBUG, logger="ble_bond.frames")
+    await link.request(REQUEST)
+    frames = [r for r in caplog.records if r.name == "ble_bond.frames"]
+    assert [r.getMessage().split(": ")[1][:2] for r in frames] == ["tx", "rx"]
+
+
+def test_a_configured_frames_level_is_kept() -> None:
+    assert logging.getLogger("ble_bond.frames").level in (logging.INFO, logging.DEBUG)

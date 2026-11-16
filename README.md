@@ -79,6 +79,10 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
+Debug logging for `ble_bond` shows the link's events: connecting, pairing evidence, retries,
+frames no request was waiting for. Every frame sent and received goes to `ble_bond.frames`,
+which stays at INFO unless you set it to debug.
+
 `ble_bond.testing` has a fake bleak client and a patch for the connection call, so a device
 library can test its transport without hardware.
 

@@ -59,6 +59,14 @@ if TYPE_CHECKING:
     from bleak.backends.device import BLEDevice
 
 _LOGGER = logging.getLogger(__name__)
+_FRAMES = logging.getLogger("ble_bond.frames")
+"""Every frame sent and received, at debug level: a dozen or more lines per exchange.
+
+It starts at INFO, so turning on debug logging for ``ble_bond`` (Home Assistant's "Enable debug
+logging" does) shows the link without the frames. Set ``ble_bond.frames`` to debug to see them;
+a level configured before this module is imported is kept."""
+if _FRAMES.level == logging.NOTSET:
+    _FRAMES.setLevel(logging.INFO)
 
 type Accept = Callable[[bytes], bool]
 """Says whether a complete frame is the reply the pending request waits for."""
@@ -524,7 +532,7 @@ class BondedLink:
 
     async def _write(self, client: BleakClient, frame: bytes) -> None:
         self.last_frames.append(("tx", frame))
-        _LOGGER.debug("%s: tx %s", self._name, frame.hex(" "))
+        _FRAMES.debug("%s: tx %s", self._name, frame.hex(" "))
         size = self._write_size(client)
         for start in range(0, len(frame), size):
             if start:
@@ -562,7 +570,7 @@ class BondedLink:
         for frame in self._assembler.feed(data):
             self.last_frames.append(("rx", frame))
             self._reply_seen = True
-            _LOGGER.debug("%s: rx %s", self._name, frame.hex(" "))
+            _FRAMES.debug("%s: rx %s", self._name, frame.hex(" "))
             pending = self._pending
             if pending is None or pending.done():
                 self.unsolicited += 1
